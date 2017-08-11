@@ -17,7 +17,7 @@ public class Server implements Runnable {
         // Loop-catcher clients:
         while(true) {
             try {
-                new Capitalizer(serverSocket.accept(), ++clientCount);
+                new Capitalizer(serverSocket.accept(), ++clientCount).start();
                 println("Client # " + clientCount + " was connected");
             } catch (IOException e) {
                 System.err.println("Cannot add new client");
