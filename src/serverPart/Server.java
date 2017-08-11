@@ -20,24 +20,24 @@ public class Server implements Runnable {
         // Initialization some objects:
         initialization();
 
-        // Loop-catcher clients:
-        while(true) {
-            try {
-                // Adding a new client:
-                clients.add(serverSocket.accept());
-                new Capitalizer(clients.peekLast(), ++clientCount).start();
-                println("Client # " + clientCount + " was connected");
-            } catch (IOException e) {
-                System.err.println("Cannot add new client");
-            }
-            finally {
+        Socket socket;
+
+        try {
+            while((socket = serverSocket.accept()) != null) {
                 try {
-                    serverSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    // Adding a new client:
+                    clients.add(socket);
+                    new Capitalizer(clients.peekLast(), ++clientCount).start();
+                    println("Client # " + clientCount + " was connected");
+                } finally {
+                    try {
+                        serverSocket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
+        } catch (IOException e) { }
     }
 
     private static void initialization() {
