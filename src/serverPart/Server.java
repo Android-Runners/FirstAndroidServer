@@ -2,22 +2,30 @@ package serverPart;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.LinkedList;
 
 public class Server implements Runnable {
 
     private static Integer clientCount = 0;
     private static ServerSocket serverSocket;
 
+    // List of clients:
+    private static LinkedList<Socket> clients = new LinkedList<>();
+
     @Override
     public void run() {
         println("Server was started");
 
+        // Initialization some objects:
         initialization();
 
         // Loop-catcher clients:
         while(true) {
             try {
-                new Capitalizer(serverSocket.accept(), ++clientCount).start();
+                // Adding a new client:
+                clients.add(serverSocket.accept());
+                new Capitalizer(clients.peekLast(), ++clientCount).start();
                 println("Client # " + clientCount + " was connected");
             } catch (IOException e) {
                 System.err.println("Cannot add new client");

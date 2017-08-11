@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+// Class that makes all stuff with clients (except adding, of course)
+
 public class Capitalizer extends Thread {
 
     private Socket socket;
