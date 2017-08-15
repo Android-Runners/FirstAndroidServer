@@ -12,12 +12,16 @@ public class Capitalizer extends Thread {
     private Socket socket;
     private int clientNumber;
 
-    private static ObjectOutputStream output;
-    private static ObjectInputStream input;
+    private ObjectOutputStream output;
+    private ObjectInputStream input;
 
     Capitalizer(Socket socket, int clientNumber) {
         this.socket = socket;
         this.clientNumber = clientNumber;
+
+        setPriority(NORM_PRIORITY);
+
+
     }
 
     @Override

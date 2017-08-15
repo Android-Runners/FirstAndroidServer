@@ -1,6 +1,7 @@
 package serverPart;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -11,7 +12,7 @@ public class Server implements Runnable {
     private static ServerSocket serverSocket;
 
     // List of clients:
-    private static LinkedList<Socket> clients = new LinkedList<>();
+    private LinkedList<Socket> clients = new LinkedList<>();
 
     @Override
     public void run() {
@@ -20,13 +21,11 @@ public class Server implements Runnable {
         // Initialization some objects:
         initialization();
 
-        Socket socket;
-
         try {
-            while((socket = serverSocket.accept()) != null) {
+            while(true) {
                 try {
                     // Adding a new client:
-                    clients.add(socket);
+                    clients.add(serverSocket.accept());
                     new Capitalizer(clients.peekLast(), ++clientCount).start();
                     println("Client # " + clientCount + " was connected");
                 } finally {
@@ -40,9 +39,9 @@ public class Server implements Runnable {
         } catch (IOException e) { }
     }
 
-    private static void initialization() {
+    private void initialization() {
         try {
-            serverSocket = new ServerSocket(6000);
+            serverSocket = new ServerSocket(7000, 0, InetAddress.getByName("localhost"));
         } catch (IOException e) {
             System.err.println("Probably something wrong with port 6000. Maybe it is already used in another application.");
             System.err.println("This application will be switched off.");
@@ -50,7 +49,7 @@ public class Server implements Runnable {
         }
     }
 
-    private static void println(Object o) {
+    private void println(Object o) {
         System.out.println(o);
     }
 }
